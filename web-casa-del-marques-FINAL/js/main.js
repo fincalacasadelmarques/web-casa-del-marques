@@ -7,10 +7,19 @@
   var boton = document.querySelector(".boton-menu");
   var nav = document.querySelector(".nav");
   if (boton && nav) {
-    boton.addEventListener("click", function () {
-      var abierto = nav.classList.toggle("abierto");
+    var ponerMenu = function (abierto) {
+      nav.classList.toggle("abierto", abierto);
       boton.setAttribute("aria-expanded", abierto ? "true" : "false");
-      document.body.style.overflow = abierto ? "hidden" : "";
+      boton.setAttribute("aria-label", abierto ? "Cerrar menú" : "Abrir menú");
+    };
+    boton.addEventListener("click", function () {
+      ponerMenu(!nav.classList.contains("abierto"));
+    });
+    nav.addEventListener("click", function (e) {
+      if (e.target.closest("a")) ponerMenu(false);
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") ponerMenu(false);
     });
   }
 
@@ -113,6 +122,14 @@
       if (e.key === "ArrowRight") mover(1);
     });
   }
+
+  /* --- Todos los formularios: página de "gracias" en este mismo dominio y fechas desde hoy --- */
+  document.querySelectorAll("form").forEach(function (f) {
+    var n = f.querySelector('[name="_next"]');
+    if (n && /^https?:/.test(location.protocol)) n.value = new URL(raiz + "gracias/", location.href).href;
+    var hoy = new Date().toISOString().slice(0, 10);
+    f.querySelectorAll('input[type="date"]').forEach(function (d) { d.min = hoy; });
+  });
 
   /* --- Formulario de consulta --- */
   var form = document.getElementById("form-consulta");
