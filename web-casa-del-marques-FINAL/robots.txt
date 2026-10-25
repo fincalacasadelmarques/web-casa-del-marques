@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+Disallow: /gracias/
+Sitemap: https://lacasadelmarques.es/sitemap.xml
